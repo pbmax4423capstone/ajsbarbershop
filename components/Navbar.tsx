@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
@@ -20,10 +21,19 @@ export default function Navbar() {
         {/* Logo / Shop Name */}
         <Link
           href="/"
-          className="text-xl font-bold tracking-tight hover:text-accent transition-colors"
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
           onClick={() => setMenuOpen(false)}
         >
-          A.J&apos;s Barbershop
+          <Image
+            src="/ajsbarbershop/images/logo.png"
+            alt="A.J's Barbershop Logo"
+            width={50}
+            height={50}
+            className="rounded-full"
+          />
+          <span className="text-xl font-bold tracking-tight">
+            A.J&apos;s Barbershop
+          </span>
         </Link>
 
         {/* Desktop nav links */}
