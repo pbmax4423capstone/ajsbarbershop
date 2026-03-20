@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   // basePath must match your GitHub repository name exactly.
   // Example: if your repo is github.com/username/ajs-barbershop-web, use '/ajs-barbershop-web'
   // Leave empty string '' if deploying to a root domain (e.g. username.github.io)
-  basePath: '/ajs-barbershop-web',
+  basePath: '/ajsbarbershop',
 }
 
 export default nextConfig
