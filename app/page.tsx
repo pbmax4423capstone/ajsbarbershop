@@ -1,65 +1,115 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { BUSINESS } from '@/lib/business'
+import { isOpenNow, getTodayHours, formatTimeRange } from '@/lib/hours'
+import BookingCTA from '@/components/BookingCTA'
+import HoursTable from '@/components/HoursTable'
+import ServiceCard from '@/components/ServiceCard'
 
-export default function Home() {
+export default function HomePage() {
+  const open = isOpenNow(BUSINESS.hours)
+  const today = getTodayHours(BUSINESS.hours)
+  const todayHoursText = formatTimeRange(today.open, today.close)
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="max-w-5xl mx-auto px-4 py-10 space-y-16">
+
+      {/* ── Section 1: Hero ── */}
+      <section className="text-center space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight">
+            A.J&apos;s Barbershop
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg text-text-secondary">
+            {BUSINESS.tagline} &mdash; Greenwood Village, CO
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* Open/Closed badge */}
+        <div className="flex justify-center">
+          <span
+            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold ${
+              open
+                ? 'bg-success/10 text-success'
+                : 'bg-error/10 text-error'
+            }`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <span
+              className={`w-2 h-2 rounded-full ${open ? 'bg-success' : 'bg-error'}`}
+              aria-hidden="true"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {open ? 'Open Now' : 'By Appointment'}
+          </span>
         </div>
-      </main>
+
+        <p className="text-text-secondary text-sm">
+          Today: <span className="font-medium text-text-main">{todayHoursText}</span>
+        </p>
+
+        <BookingCTA size="lg" className="inline-block" />
+      </section>
+
+      {/* ── Section 2: Services Preview ── */}
+      <section>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-2xl font-bold text-primary">Our Services</h2>
+          <Link
+            href="/services"
+            className="text-sm font-medium text-accent hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent rounded"
+          >
+            View All →
+          </Link>
+        </div>
+        <div className="space-y-3">
+          {BUSINESS.services.slice(0, 3).map((service) => (
+            <ServiceCard key={service.name} service={service} />
+          ))}
+        </div>
+        <div className="mt-4 text-center">
+          <Link
+            href="/services"
+            className="text-sm font-medium text-accent hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent rounded"
+          >
+            View All Services →
+          </Link>
+        </div>
+      </section>
+
+      {/* ── Section 3: Hours ── */}
+      <section>
+        <h2 className="text-2xl font-bold text-primary mb-5">Hours</h2>
+        <div className="bg-surface border border-border rounded-lg p-4 shadow-sm">
+          <HoursTable highlightToday={true} />
+        </div>
+      </section>
+
+      {/* ── Section 4: Contact / Find Us ── */}
+      <section>
+        <h2 className="text-2xl font-bold text-primary mb-5">Find Us</h2>
+        <div className="bg-surface border border-border rounded-lg p-6 shadow-sm space-y-4">
+          <p className="text-text-main">
+            {BUSINESS.address.fullFormatted}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={BUSINESS.directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-5 py-2.5 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors duration-200 text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded-lg"
+              aria-label="Get directions to A.J's Barbershop (opens in new tab)"
+            >
+              Get Directions
+            </a>
+            <a
+              href={`mailto:${BUSINESS.email}`}
+              className="inline-block px-5 py-2.5 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors duration-200 text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded-lg"
+              aria-label="Email A.J's Barbershop"
+            >
+              Email Us
+            </a>
+          </div>
+        </div>
+      </section>
+
     </div>
-  );
+  )
 }
