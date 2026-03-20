@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pbmax4423.github.io/ajs-barbershop-web/sitemap.xml
